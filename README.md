@@ -19,7 +19,7 @@ $ echo '{
             "isRegex": false
         }
     ]
-}' | ./amp-silence -e https://aps-workspaces.ap-northeast-1.amazonaws.com/workspaces/ws-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/ -a
+}' | ./amp-silence add -e https://aps-workspaces.ap-northeast-1.amazonaws.com/workspaces/ws-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/
 
 {"silenceID": "yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy"}
 ```
@@ -27,7 +27,7 @@ $ echo '{
 ### Delete silence
 
 ```bash
-$ ./amp-silence -e https://aps-workspaces.ap-northeast-1.amazonaws.com/workspaces/ws-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/ -d -s yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy
+$ ./amp-silence delete -e https://aps-workspaces.ap-northeast-1.amazonaws.com/workspaces/ws-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/ -s yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy
 ```
 
 ### Query with JMESPath
@@ -45,7 +45,7 @@ $ echo '{
             "isRegex": false
         }
     ]
-}' | ./amp-silence -e https://aps-workspaces.ap-northeast-1.amazonaws.com/workspaces/ws-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/ -a -q 'silenceID'
+}' | ./amp-silence add -e https://aps-workspaces.ap-northeast-1.amazonaws.com/workspaces/ws-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/ -q 'silenceID'
 
 "yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy"
 ```
@@ -53,14 +53,14 @@ $ echo '{
 ### List silences
 
 ```bash
-$ ./amp-silence -e https://aps-workspaces.ap-northeast-1.amazonaws.com/workspaces/ws-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/ -l -q "[].id"
+$ ./amp-silence list -e https://aps-workspaces.ap-northeast-1.amazonaws.com/workspaces/ws-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/ -q "[].id"
 ["yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy"]
 ```
 
 ### Raw output
 
 ```bash
-$ ./amp-silence -e https://aps-workspaces.ap-northeast-1.amazonaws.com/workspaces/ws-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/ -l -q "[0].id" -r
+$ ./amp-silence list -e https://aps-workspaces.ap-northeast-1.amazonaws.com/workspaces/ws-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/ -q "[0].id" -r
 yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy
 ```
 
