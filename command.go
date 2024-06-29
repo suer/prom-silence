@@ -12,6 +12,7 @@ import (
 type RootOptions struct {
 	IsAdd     bool
 	IsDelete  bool
+	IsList    bool
 	Query     string
 	EndPoint  string
 	SilenceId string
@@ -26,7 +27,7 @@ func rootCmd() *cobra.Command {
 		SilenceUsage:  true,
 		SilenceErrors: false,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if !opts.IsAdd && !opts.IsDelete {
+			if !opts.IsAdd && !opts.IsDelete && !opts.IsList {
 				cmd.Help()
 			}
 			return run(opts)
@@ -37,6 +38,7 @@ func rootCmd() *cobra.Command {
 	cmd.MarkFlagRequired("endpoint")
 	cmd.Flags().BoolVarP(&opts.IsAdd, "add", "a", false, "add silence")
 	cmd.Flags().BoolVarP(&opts.IsDelete, "delete", "d", false, "delete silence")
+	cmd.Flags().BoolVarP(&opts.IsList, "list", "l", false, "list silences")
 	cmd.Flags().StringVarP(&opts.Query, "query", "q", "", "JMESPath query (ex: 'silenceID')")
 	cmd.Flags().StringVarP(&opts.SilenceId, "silenceid", "s", "", "silence id (ex: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)")
 
@@ -51,9 +53,14 @@ func run(opts *RootOptions) error {
 			return err
 		}
 		result = r
-
 	} else if opts.IsDelete {
 		r, err := DeleteSilence(opts.EndPoint, opts.SilenceId)
+		if err != nil {
+			return err
+		}
+		result = r
+	} else if opts.IsList {
+		r, err := ListSilences(opts.EndPoint)
 		if err != nil {
 			return err
 		}
