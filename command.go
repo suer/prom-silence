@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/jmespath/go-jmespath"
 	"github.com/spf13/cobra"
 )
@@ -16,6 +17,7 @@ type RootOptions struct {
 	Query     string
 	EndPoint  string
 	SilenceId string
+	RawOutput bool
 }
 
 func rootCmd() *cobra.Command {
@@ -41,6 +43,7 @@ func rootCmd() *cobra.Command {
 	cmd.Flags().BoolVarP(&opts.IsList, "list", "l", false, "list silences")
 	cmd.Flags().StringVarP(&opts.Query, "query", "q", "", "JMESPath query (ex: 'silenceID')")
 	cmd.Flags().StringVarP(&opts.SilenceId, "silenceid", "s", "", "silence id (ex: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)")
+	cmd.Flags().BoolVarP(&opts.RawOutput, "raw-output", "r", false, "print string as raw output")
 
 	return cmd
 }
@@ -68,7 +71,7 @@ func run(opts *RootOptions) error {
 	}
 
 	if len(opts.Query) > 0 {
-		r, err := applyJMESPath(opts.Query, result)
+		r, err := applyJMESPath(opts.Query, result, opts.RawOutput)
 		if err != nil {
 			return err
 		}
@@ -80,7 +83,7 @@ func run(opts *RootOptions) error {
 	return nil
 }
 
-func applyJMESPath(query string, data []byte) ([]byte, error) {
+func applyJMESPath(query string, data []byte, rawOutput bool) ([]byte, error) {
 	var jsonData interface{}
 	err := json.Unmarshal(data, &jsonData)
 	if err != nil {
@@ -90,5 +93,15 @@ func applyJMESPath(query string, data []byte) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	if rawOutput {
+		switch t := result.(type) {
+		case string:
+			return []byte(t), nil
+		case *string:
+			return []byte(aws.ToString(t)), nil
+		}
+	}
+
 	return json.Marshal(result)
 }
