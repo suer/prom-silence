@@ -47,14 +47,14 @@ $ echo '{
     ]
 }' | ./amp-silence -e https://aps-workspaces.ap-northeast-1.amazonaws.com/workspaces/ws-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/ -a -q 'silenceID'
 
-yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy
+"yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy"
 ```
 
 ### List silences
 
 ```bash
 $ ./amp-silence -e https://aps-workspaces.ap-northeast-1.amazonaws.com/workspaces/ws-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/ -l -q "[].id"
-[yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy]
+["yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy"]
 ```
 
 ## Build
