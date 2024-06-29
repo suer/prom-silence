@@ -1,6 +1,6 @@
-# prom-silence
+# amp-silence
 
-This is a simple CLI to add/delete silences in Prometheus Alertmanager.
+This is a simple CLI to add/delete silences in AMP(Amazon Managed Service for Prometheus) Alertmanager.
 
 ## Usage
 
