@@ -90,6 +90,5 @@ func applyJMESPath(query string, data []byte) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	json := fmt.Sprintf("%v", result)
-	return []byte(json), nil
+	return json.Marshal(result)
 }
