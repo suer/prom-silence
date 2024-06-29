@@ -30,7 +30,7 @@ func RequestWithSigv4(httpMethod string, url string, body []byte) ([]byte, error
 		return nil, err
 	}
 
-	req, err := http.NewRequest(http.MethodPost, url, reqBody)
+	req, err := http.NewRequest(httpMethod, url, reqBody)
 	if err != nil {
 		return nil, err
 	}
