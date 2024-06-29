@@ -20,7 +20,7 @@ type RootOptions struct {
 func rootCmd() *cobra.Command {
 	opts := &RootOptions{}
 	cmd := &cobra.Command{
-		Use:           "prom-silence",
+		Use:           "amp-silence",
 		Short:         "",
 		Args:          cobra.MatchAll(cobra.NoArgs, cobra.OnlyValidArgs),
 		SilenceUsage:  true,

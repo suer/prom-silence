@@ -1,4 +1,4 @@
-module github.com/suer/prom-silence
+module github.com/suer/amp-silence
 
 go 1.22.3
 

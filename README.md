@@ -19,7 +19,7 @@ $ echo '{
             "isRegex": false
         }
     ]
-}' | ./prom-silence -e https://aps-workspaces.ap-northeast-1.amazonaws.com/workspaces/ws-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/ -a
+}' | ./amp-silence -e https://aps-workspaces.ap-northeast-1.amazonaws.com/workspaces/ws-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/ -a
 
 {"silenceID": "yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy"}
 ```
@@ -27,7 +27,7 @@ $ echo '{
 ### Delete silence
 
 ```bash
-$ ./prom-silence -e https://aps-workspaces.ap-northeast-1.amazonaws.com/workspaces/ws-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/ -d -s yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy
+$ ./amp-silence -e https://aps-workspaces.ap-northeast-1.amazonaws.com/workspaces/ws-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/ -d -s yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy
 ```
 
 ### Query with JMESPath
@@ -45,7 +45,7 @@ $ echo '{
             "isRegex": false
         }
     ]
-}' | ./prom-silence -e https://aps-workspaces.ap-northeast-1.amazonaws.com/workspaces/ws-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/ -a -q 'silenceID'
+}' | ./amp-silence -e https://aps-workspaces.ap-northeast-1.amazonaws.com/workspaces/ws-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/ -a -q 'silenceID'
 
 yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy
 ```
