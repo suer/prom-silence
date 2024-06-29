@@ -57,6 +57,13 @@ $ ./amp-silence -e https://aps-workspaces.ap-northeast-1.amazonaws.com/workspace
 ["yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy"]
 ```
 
+### Raw output
+
+```bash
+$ ./amp-silence -e https://aps-workspaces.ap-northeast-1.amazonaws.com/workspaces/ws-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/ -l -q "[0].id" -r
+yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy
+```
+
 ## Build
 
 ```bash
