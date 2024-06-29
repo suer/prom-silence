@@ -10,77 +10,39 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type RootOptions struct {
-	IsAdd     bool
-	IsDelete  bool
-	IsList    bool
+type AddOptions struct {
 	Query     string
 	EndPoint  string
+	RawOutput bool
+}
+
+type DeleteOptions struct {
+	Query     string
+	EndPoint  string
+	RawOutput bool
 	SilenceId string
+}
+
+type ListOptions struct {
+	Query     string
+	EndPoint  string
 	RawOutput bool
 }
 
 func rootCmd() *cobra.Command {
-	opts := &RootOptions{}
 	cmd := &cobra.Command{
 		Use:           "amp-silence",
 		Short:         "",
 		Args:          cobra.MatchAll(cobra.NoArgs, cobra.OnlyValidArgs),
 		SilenceUsage:  true,
 		SilenceErrors: false,
-		RunE: func(cmd *cobra.Command, args []string) error {
-			if !opts.IsAdd && !opts.IsDelete && !opts.IsList {
-				cmd.Help()
-			}
-			return run(opts)
-		},
 	}
 
-	cmd.Flags().StringVarP(&opts.EndPoint, "endpoint", "e", "", "API endpoint URL (ex: https://aps-workspaces.ap-northeast-1.amazonaws.com/workspaces/ws-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/)")
-	cmd.MarkFlagRequired("endpoint")
-	cmd.Flags().BoolVarP(&opts.IsAdd, "add", "a", false, "add silence")
-	cmd.Flags().BoolVarP(&opts.IsDelete, "delete", "d", false, "delete silence")
-	cmd.Flags().BoolVarP(&opts.IsList, "list", "l", false, "list silences")
-	cmd.Flags().StringVarP(&opts.Query, "query", "q", "", "JMESPath query (ex: 'silenceID')")
-	cmd.Flags().StringVarP(&opts.SilenceId, "silenceid", "s", "", "silence id (ex: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)")
-	cmd.Flags().BoolVarP(&opts.RawOutput, "raw-output", "r", false, "print string as raw output")
+	cmd.AddCommand(createAddCmd())
+	cmd.AddCommand(createDeleteCommand())
+	cmd.AddCommand(createListCmd())
 
 	return cmd
-}
-
-func run(opts *RootOptions) error {
-	result := []byte{}
-	if opts.IsAdd {
-		r, err := AddSilence(opts.EndPoint, os.Stdin)
-		if err != nil {
-			return err
-		}
-		result = r
-	} else if opts.IsDelete {
-		r, err := DeleteSilence(opts.EndPoint, opts.SilenceId)
-		if err != nil {
-			return err
-		}
-		result = r
-	} else if opts.IsList {
-		r, err := ListSilences(opts.EndPoint)
-		if err != nil {
-			return err
-		}
-		result = r
-	}
-
-	if len(opts.Query) > 0 {
-		r, err := applyJMESPath(opts.Query, result, opts.RawOutput)
-		if err != nil {
-			return err
-		}
-		result = r
-	}
-
-	fmt.Println(string(result))
-
-	return nil
 }
 
 func applyJMESPath(query string, data []byte, rawOutput bool) ([]byte, error) {
@@ -104,4 +66,96 @@ func applyJMESPath(query string, data []byte, rawOutput bool) ([]byte, error) {
 	}
 
 	return json.Marshal(result)
+}
+
+func printResult(result []byte, query string, rawOutput bool) {
+	if len(query) > 0 {
+		r, err := applyJMESPath(query, result, rawOutput)
+		if err != nil {
+			fmt.Println(err)
+		}
+		result = r
+	}
+	fmt.Println(string(result))
+}
+
+func createAddCmd() *cobra.Command {
+	opts := &AddOptions{}
+
+	cmd := &cobra.Command{
+		Use:           "add",
+		Short:         "",
+		Args:          cobra.MatchAll(cobra.NoArgs, cobra.OnlyValidArgs),
+		SilenceUsage:  true,
+		SilenceErrors: false,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			result, err := AddSilence(opts.EndPoint, os.Stdin)
+			if err != nil {
+				return err
+			}
+			printResult(result, opts.Query, opts.RawOutput)
+			return nil
+		},
+	}
+
+	cmd.Flags().StringVarP(&opts.EndPoint, "endpoint", "e", "", "API endpoint URL (ex: https://aps-workspaces.ap-northeast-1.amazonaws.com/workspaces/ws-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/)")
+	cmd.MarkFlagRequired("endpoint")
+	cmd.Flags().StringVarP(&opts.Query, "query", "q", "", "JMESPath query (ex: 'silenceID')")
+	cmd.Flags().BoolVarP(&opts.RawOutput, "raw-output", "r", false, "print string as raw output")
+
+	return cmd
+}
+
+func createDeleteCommand() *cobra.Command {
+	opts := &DeleteOptions{}
+
+	cmd := &cobra.Command{
+		Use:           "delete",
+		Short:         "",
+		Args:          cobra.MatchAll(cobra.NoArgs, cobra.OnlyValidArgs),
+		SilenceUsage:  true,
+		SilenceErrors: false,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			result, err := DeleteSilence(opts.EndPoint, opts.SilenceId)
+			if err != nil {
+				return err
+			}
+			printResult(result, opts.Query, opts.RawOutput)
+			return nil
+		},
+	}
+	cmd.Flags().StringVarP(&opts.SilenceId, "silenceid", "s", "", "silence id (ex: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)")
+	cmd.Flags().StringVarP(&opts.EndPoint, "endpoint", "e", "", "API endpoint URL (ex: https://aps-workspaces.ap-northeast-1.amazonaws.com/workspaces/ws-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/)")
+	cmd.MarkFlagRequired("endpoint")
+	cmd.Flags().StringVarP(&opts.Query, "query", "q", "", "JMESPath query (ex: 'silenceID')")
+	cmd.Flags().BoolVarP(&opts.RawOutput, "raw-output", "r", false, "print string as raw output")
+
+	return cmd
+}
+
+func createListCmd() *cobra.Command {
+	opts := &ListOptions{}
+
+	cmd := &cobra.Command{
+		Use:           "list",
+		Short:         "",
+		Args:          cobra.MatchAll(cobra.NoArgs, cobra.OnlyValidArgs),
+		SilenceUsage:  true,
+		SilenceErrors: false,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			result, err := ListSilences(opts.EndPoint)
+			if err != nil {
+				return err
+			}
+			printResult(result, opts.Query, opts.RawOutput)
+			return nil
+		},
+	}
+
+	cmd.Flags().StringVarP(&opts.EndPoint, "endpoint", "e", "", "API endpoint URL (ex: https://aps-workspaces.ap-northeast-1.amazonaws.com/workspaces/ws-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/)")
+	cmd.MarkFlagRequired("endpoint")
+	cmd.Flags().StringVarP(&opts.Query, "query", "q", "", "JMESPath query (ex: 'silenceID')")
+	cmd.Flags().BoolVarP(&opts.RawOutput, "raw-output", "r", false, "print string as raw output")
+
+	return cmd
 }
