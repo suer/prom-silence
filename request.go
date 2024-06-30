@@ -19,7 +19,7 @@ func RequestWithSigv4(httpMethod string, url string, body []byte) ([]byte, error
 	hash := sha256.Sum256(body)
 	hashString := hex.EncodeToString(hash[:])
 
-	ctx := context.TODO()
+	ctx := context.Background()
 	cfg, err := config.LoadDefaultConfig(ctx)
 	if err != nil {
 		return nil, err
