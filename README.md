@@ -24,11 +24,15 @@ $ echo '{
 {"silenceID": "yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy"}
 ```
 
+Required permission: `aps:PutAlertManagerSilences`
+
 ### Delete silence
 
 ```bash
 $ ./amp-silence delete -e https://aps-workspaces.ap-northeast-1.amazonaws.com/workspaces/ws-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/ -s yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy
 ```
+
+Required permission: `aps:DeleteAlertManagerSilence`
 
 ### List silences
 
@@ -36,6 +40,8 @@ $ ./amp-silence delete -e https://aps-workspaces.ap-northeast-1.amazonaws.com/wo
 $ ./amp-silence list -e https://aps-workspaces.ap-northeast-1.amazonaws.com/workspaces/ws-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/
 [{"comment":"Maintenance","createdBy":"suer","endsAt":"2024-06-30T23:59:59.000Z","id":"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx","matchers":[{"isEqual":true,"isRegex":false,"name":"host","value":"www.example.com"}],"startsAt":"2024-06-30T15:00:00.000Z","status":{"state":"pending"},"updatedAt":"2024-06-29T10:57:20.518Z"}]
 ```
+
+Required permission: `aps:ListAlertManagerSilences`
 
 ## Advanced Usage
 
