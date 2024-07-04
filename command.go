@@ -29,6 +29,11 @@ type ListOptions struct {
 	RawOutput bool
 }
 
+type ListWorkspacesOptions struct {
+	Query     string
+	RawOutput bool
+}
+
 func rootCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:           "amp-silence",
@@ -41,6 +46,7 @@ func rootCmd() *cobra.Command {
 	cmd.AddCommand(createAddCmd())
 	cmd.AddCommand(createDeleteCommand())
 	cmd.AddCommand(createListCmd())
+	cmd.AddCommand(createListWorkspcesCmd())
 
 	return cmd
 }
@@ -154,6 +160,31 @@ func createListCmd() *cobra.Command {
 
 	cmd.Flags().StringVarP(&opts.EndPoint, "endpoint", "e", "", "API endpoint URL (ex: https://aps-workspaces.ap-northeast-1.amazonaws.com/workspaces/ws-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/)")
 	cmd.MarkFlagRequired("endpoint")
+	cmd.Flags().StringVarP(&opts.Query, "query", "q", "", "JMESPath query (ex: 'silenceID')")
+	cmd.Flags().BoolVarP(&opts.RawOutput, "raw-output", "r", false, "print string as raw output")
+
+	return cmd
+}
+
+func createListWorkspcesCmd() *cobra.Command {
+	opts := &ListWorkspacesOptions{}
+
+	cmd := &cobra.Command{
+		Use:           "list-workspaces",
+		Short:         "",
+		Args:          cobra.MatchAll(cobra.NoArgs, cobra.OnlyValidArgs),
+		SilenceUsage:  true,
+		SilenceErrors: false,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			result, err := ListWorkspaces()
+			if err != nil {
+				return err
+			}
+			printResult(result, opts.Query, opts.RawOutput)
+			return nil
+		},
+	}
+
 	cmd.Flags().StringVarP(&opts.Query, "query", "q", "", "JMESPath query (ex: 'silenceID')")
 	cmd.Flags().BoolVarP(&opts.RawOutput, "raw-output", "r", false, "print string as raw output")
 
