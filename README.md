@@ -43,6 +43,13 @@ $ ./amp-silence list -e https://aps-workspaces.ap-northeast-1.amazonaws.com/work
 
 Required permission: `aps:ListAlertManagerSilences`
 
+### List workspaces
+
+```bash
+$ ./amp-silence list-workspaces
+[{"Arn":"arn:aws:aps:ap-northeast-1:XXXXXXXXXXXX:workspace/ws-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx","CreatedAt":"2024-02-06T08:33:51.749Z","Status":{"StatusCode":"ACTIVE"},"WorkspaceId":"ws-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx","Alias":"aaaa","KmsKeyArn":null,"Tags":{}}]
+```
+
 ## Advanced Usage
 
 ### Query with JMESPath
