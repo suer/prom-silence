@@ -3,7 +3,7 @@ module github.com/suer/amp-silence
 go 1.22.4
 
 require (
-	github.com/aws/aws-sdk-go-v2 v1.30.4
+	github.com/aws/aws-sdk-go-v2 v1.30.5
 	github.com/aws/aws-sdk-go-v2/config v1.27.30
 	github.com/aws/aws-sdk-go-v2/service/amp v1.27.4
 	github.com/jmespath/go-jmespath v0.4.0
