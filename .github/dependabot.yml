@@ -12,4 +12,7 @@ updates:
       interval: "weekly"
       timezone: "Asia/Tokyo"
       day: "friday"
-
+    groups:
+      aws-sdk-go-v2:
+        patterns:
+          - "github.com/aws/aws-sdk-go-v2*"
